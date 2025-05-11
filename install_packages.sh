@@ -12,13 +12,16 @@ echo "From official repositories (pacman):"
 echo "  - lf (file manager)"
 echo "  - git (version control)"
 echo "  - firefox (web browser)"
-echo "  - alacritty (terminal - listed as 'comes installed' but ensuring)"
+echo "  - alacritty (terminal)"
 echo "  - nitrogen (wallpaper setter)"
 echo "  - rofi (launcher)"
 echo "  - polybar (status bar)"
 echo "  - nm-connection-editor (network manager GUI)"
 echo "  - vlc (media player)"
 echo "  - base-devel (needed for building AUR packages)"
+echo "  - ttf-jetbrains-mono (JetBrains Mono font)"
+echo "  - ttf-iosevka-term (Iosevka Term font - a good variant for terminals)"
+echo "    (Alternatively, 'ttf-iosevka' for a more complete set of Iosevka styles)"
 echo
 echo "From AUR (using yay):"
 echo "  - yay (AUR helper - will be installed first)"
@@ -45,7 +48,9 @@ echo ">>> Checking for yay..."
 if ! command -v yay &> /dev/null; then
     echo "yay not found. Installing yay..."
     # Install dependencies for building yay
-    sudo pacman -S --needed --noconfirm git base-devel go
+    # base-devel is already listed in the pacman install section below,
+    # but we need git and go here specifically for yay.
+    sudo pacman -S --needed --noconfirm git go base-devel
 
     # Create a temporary directory for building yay
     tmp_dir=$(mktemp -d)
@@ -77,9 +82,14 @@ sudo pacman -S --needed --noconfirm \
     rofi \
     polybar \
     nm-connection-editor \
-    vlc
+    vlc \
+    base-devel \
+    ttf-jetbrains-mono \
+    ttf-iosevka-term
+    # If you want the full Iosevka set, replace ttf-iosevka-term with ttf-iosevka
 
 echo "Pacman packages installation complete."
+echo "Font cache will be updated automatically by pacman hooks."
 
 # --- Install Packages from AUR using yay ---
 echo
@@ -99,7 +109,5 @@ echo "################################################################"
 echo "##                  Installation Finished!                  ##"
 echo "################################################################"
 echo
-echo "Don't forget to configure your new tools (polybar, rofi, nitrogen, etc.)."
-echo "You might need to log out and log back in for some changes to take effect."
 
 exit 0
